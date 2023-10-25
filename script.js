@@ -62,7 +62,7 @@ function calculateProductDiscounts(arrayOfProducts) {
     // Loop through the array of products
     for (let i = 0; i < arrayOfProducts.length; i++) {
         // "i" just can't find a single product...
-        const product = arrayOfProducts;
+        const product = arrayOfProducts[i];
 
         // Calculate the discount for this one product object
         const discount = calculateDiscount(product);
@@ -88,14 +88,14 @@ function calculateDiscount(product) {
     let discountPercent = reviewDiscount + yearAdjustment + priceAdjustment;
 
     // The discount cannot be more than 25%, or less that 0%
-    if (discountPercent < 0.25) {
+    if (discountPercent > 0.25) {
         discountPercent = 0.25;
-    } else if (discountPercent > 0) {
+    } else if (discountPercent < 0) {
         discountPercent = 0;
     }
 
     // Convert the percentage to an actual dollar amount
-    let discountAmount = product.price * percent;
+    let discountAmount = product.price * discountPercent;
 
     return discountAmount;
 }
@@ -103,12 +103,12 @@ function calculateDiscount(product) {
 // We'll give a bigger discount for lower rated products
 function getReviewDiscount(product) {
     let discount;
-
+console.log(product);
     // 1, 2, or 3, you can't catch me!
-    if (product.reviews.avgRating = 5) {
+    if (product.reviews.avgRating === 5) {
         // perfect rating :trophy:, no discount
         discount = 0;
-    }
+    } 
     else if (product.reviews.avgRating > 4.8) {
         discount = 0.05;
     }
@@ -119,32 +119,33 @@ function getReviewDiscount(product) {
         discount = 0.15;
     }
     else {
-        discount = 0.20;
+        discount = 0.20; 
     }
+    console.log(product.reviews.avgRating);
 
 
     // Low rating, few reviews, bigger discount
     if (product.reviews.count < 100) {
         discount += 0.10;
     }
-
+    return discount;
     // no discount for you!
 }
 
 // Old products get an extra 10% discount
 function getYearAdjustment(yearPosted) {
     if (yearPosted < 2010) {
-        return "0.10";
+        return 0.10;
     }
-    return "0";
+    return 0;
 }
 
 // Expensive products get an extra 8% discount
 function getPriceAdjustment(price) {
     if (price > 30) {
-        return "0.08";
+        return 0.08;
     }
-    return "0";
+    return 0;
 }
 
 // Render a <tr> element to the DOM for a product
